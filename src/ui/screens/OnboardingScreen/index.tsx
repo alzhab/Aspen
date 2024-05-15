@@ -9,7 +9,6 @@ export const OnboardingScreen = observer(() => {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-      }}
-    />
+      }}></View>
   )
 })
