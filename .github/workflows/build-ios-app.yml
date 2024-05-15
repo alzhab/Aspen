@@ -1,0 +1,67 @@
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Environment Variables
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "API_URL=${{ secrets.PROD_API_URL }}" >> $GITHUB_ENV    
+          elif [[ "${{ github.ref }}" == "refs/heads/stage" ]]; then
+            echo "API_URL=${{ secrets.STAGE_API_URL }}" >> $GITHUB_ENV    
+          elif [[ "${{ github.ref }}" =~ ^refs/heads/dev/ ]]; then
+            echo "API_URL=${{ secrets.DEV_API_URL }}" >> $GITHUB_ENV    
+          fi
+
+      - name: Set current date as env variable
+        run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Set repository name as env variable
+        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+
+      - name: Set branch name as env variable
+        run: echo "BRANCH_NAME=$(echo '${{ github.ref }}' | sed 's|refs/heads/||')" >> $GITHUB_ENV
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: |
+          npm install
+          cd ios && pod install
+
+      - name: Build IPA
+        run: |
+          cd ios
+          xcodebuild -workspace CIExample.xcworkspace -scheme CIExample -sdk iphoneos -configuration Release archive 
+          -archivePath $PWD/build/CIExample.xcarchive
+          xcodebuild -exportArchive -archivePath $PWD/build/CIExample.xcarchive -exportOptionsPlist exportOptions.plist 
+          -exportPath $PWD/build
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.date_today }} - ${{ env.repository_name }} - IPA ${{ env.BRANCH_NAME }}
+          path: path/to/your/CIExample.ipa
