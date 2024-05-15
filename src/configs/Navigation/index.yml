@@ -1,0 +1,7 @@
+RootNavigation:
+  OnboardingScreen:
+  BottomTabsNavigation:
+    HomeScreen:
+    TicketsScreen:
+    FavoriteScreen:
+    ProfileScreen:

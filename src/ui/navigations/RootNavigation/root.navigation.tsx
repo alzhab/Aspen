@@ -1,7 +1,8 @@
 import React, { FC } from 'react'
+import { OnboardingScreen } from 'screens/OnboardingScreen'
+import { BottomTabsNavigation } from 'navigations/BottomTabsNavigation'
 import { createStackNavigator } from '@react-navigation/stack'
 import { RootNavigationParamsMap } from './types'
-import { HomeScreen } from 'screens/HomeScreen'
 
 const Nav = createStackNavigator<RootNavigationParamsMap>()
 
@@ -12,7 +13,11 @@ export const RootNavigation: FC<{
     <Nav.Navigator
       screenOptions={{ headerShown: false }}
       initialRouteName={initialScreen}>
-      <Nav.Screen name={'HomeScreen'} component={HomeScreen} />
+      <Nav.Screen name={'OnboardingScreen'} component={OnboardingScreen} />
+      <Nav.Screen
+        name={'BottomTabsNavigation'}
+        component={BottomTabsNavigation}
+      />
     </Nav.Navigator>
   )
 }

@@ -1,3 +1,4 @@
 export type RootNavigationParamsMap = {
-  HomeScreen: undefined
+  OnboardingScreen: undefined
+  BottomTabsNavigation: undefined
 }
