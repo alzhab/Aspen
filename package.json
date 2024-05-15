@@ -12,8 +12,10 @@
   "dependencies": {
     "@corrbo/base": "^1.0.6",
     "@corrbo/cli": "file:corrbo-cli-1.0.7.tgz",
+    "@corrbo/module-icon": "^1.0.2",
     "@corrbo/module-localstorage": "^1.0.0",
     "@corrbo/module-navigation": "^1.0.2",
+    "@corrbo/module-spacing-props": "^1.0.0",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
