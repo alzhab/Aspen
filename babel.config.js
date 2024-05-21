@@ -15,12 +15,7 @@ module.exports = function (e) {
           {
             moduleName: '@env',
             path: '.env',
-            allowlist: [
-              'SERVER_URL',
-              'WEBSOCKET_URL',
-              'SIZE_MATTERS_BASE_WIDTH',
-              'SIZE_MATTERS_BASE_HEIGHT',
-            ],
+            allowlist: ['SIZE_MATTERS_BASE_WIDTH', 'SIZE_MATTERS_BASE_HEIGHT'],
           },
         ],
         [

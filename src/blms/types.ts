@@ -7,11 +7,11 @@ export type IFlowReactions = {
 export type IFlowAction<EventName extends EFlowEvents> =
   undefined extends IFlowReactionsData[EventName]
     ? {
-      (): void
-    }
+        (): void
+      }
     : {
-      (data: IFlowReactionsData[EventName]): void
-    }
+        (data: IFlowReactionsData[EventName]): void
+      }
 
 export type EFlowEvents = EAppStateFlowEvents
 

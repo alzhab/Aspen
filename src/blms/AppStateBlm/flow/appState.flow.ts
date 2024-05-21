@@ -6,7 +6,12 @@ import {
   InitialRouteActionsId,
 } from '@corrbo/module-navigation/blm/actions'
 import { EVENT_EMITTER } from '@corrbo/base/IOC/IOCProvider'
-import { IFlowReactions } from '../../types'
+import { IFlowReactions } from 'blms/types'
+import LottieSplashScreen from 'react-native-lottie-splash-screen'
+import {
+  IOnboardingActions,
+  OnboardingActionsId,
+} from 'blms/OnboardingBlm/actions'
 
 export const AppStateFlowId = Symbol.for('AppStateFlow')
 EVENT_EMITTER.addFlowId(AppStateFlowId)
@@ -16,6 +21,8 @@ export class AppStateFlow implements IAppState {
   constructor(
     @inject(InitialRouteActionsId)
     private initialRouteActions: IInitialRouteActions,
+    @inject(OnboardingActionsId)
+    private onboardingActions: IOnboardingActions,
   ) {}
 
   get reactions(): IFlowReactions {
@@ -25,10 +32,15 @@ export class AppStateFlow implements IAppState {
   }
 
   onAppOpen(): void {
-    this.initialRouteActions.setInitialRouteName(this.screen)
+    setTimeout(() => {
+      LottieSplashScreen.hide()
+      this.initialRouteActions.setInitialRouteName(this.screen)
+    }, 1000)
   }
 
   get screen(): keyof RootNavigationParamsMap {
-    return 'HomeScreen'
+    return this.onboardingActions.isNeedToShowOnboarding()
+      ? 'OnboardingScreen'
+      : 'BottomTabsNavigation'
   }
 }
